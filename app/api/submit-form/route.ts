@@ -1,9 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { google } from 'googleapis';
+import { google, Auth } from 'googleapis';
 
 // SPREADSHEET_ID will now come from environment variable
 // const SPREADSHEET_ID = '1InawAiSrQX1S7JTtaaJW6kwRy873shjs9qrCaikeKTI'; 
 const SHEET_NAME = 'Sheet1'; // Or your specific sheet name
+
+// Define an interface for the form data
+interface FormDataInterface {
+  name: string;
+  phone: string;
+  message?: string;
+  privacy?: boolean;
+}
 
 // Helper function to format Korean phone numbers
 function formatKoreanPhoneNumber(phoneNumber: string): string {
@@ -24,7 +32,7 @@ function formatKoreanPhoneNumber(phoneNumber: string): string {
   return phoneNumber; // Return original (or cleaned) if no specific format matches
 }
 
-async function getAuthClient() {
+async function getAuthClient(): Promise<Auth.GoogleAuth> {
   // Read credentials from environment variable
   const credentialsJson = process.env.GOOGLE_CREDENTIALS_JSON;
   if (!credentialsJson) {
@@ -33,7 +41,8 @@ async function getAuthClient() {
   }
   try {
     const credentials = JSON.parse(credentialsJson);
-    return google.auth.getClient({
+    // Cast to OAuth2Client
+    return new google.auth.GoogleAuth({
       credentials,
       scopes: ['https://www.googleapis.com/auth/spreadsheets'],
     });
@@ -43,7 +52,7 @@ async function getAuthClient() {
   }
 }
 
-async function appendToSheet(auth: any, data: any, spreadsheetId: string) {
+async function appendToSheet(auth: Auth.GoogleAuth, data: FormDataInterface, spreadsheetId: string) {
   const sheets = google.sheets({ version: 'v4', auth });
   const timestamp = new Date().toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' });
   const privacyConsentText = data.privacy ? '동의함' : '미동의'; // Or however you want to represent this
@@ -72,7 +81,8 @@ export async function POST(request: NextRequest) {
 
   try {
     const rawData = await request.json();
-    let { name, phone, message, privacy } = rawData;
+    // Use const for variables that are not reassigned
+    const { name, phone, message, privacy } = rawData as FormDataInterface;
 
     if (!name || !phone) {
       return NextResponse.json({ message: '이름과 핸드폰 번호는 필수입니다.' }, { status: 400 });
@@ -90,18 +100,24 @@ export async function POST(request: NextRequest) {
       data: { name, phone: formattedPhone, message, privacy } 
     }, { status: 200 });
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error processing form submission or appending to Google Sheets:', error);
     let errorMessage = '오류가 발생했습니다. 다시 시도해주세요.';
-    if (error.message === 'Google API credentials configuration is missing.' || error.message === 'Invalid Google API credentials format.') {
-        errorMessage = '서버 설정 오류: Google API 인증 정보가 잘못되었습니다.';
-    } else if (error.code === 'ENOENT') { // Should not happen anymore with env vars
-      errorMessage = 'Google API 인증 파일(credentials.json)을 찾을 수 없습니다. 경로를 확인해주세요.';
-    } else if (error.message && error.message.includes('PERMISSION_DENIED')) {
-      errorMessage = 'Google Sheet에 접근 권한이 없습니다. 서비스 계정에 편집자 권한을 부여했는지 확인해주세요.';
-    } else if (error.message && error.message.includes('Requested entity was not found')){
-      errorMessage = `Google Sheet ID (${spreadsheetId}) 또는 시트 이름 (${SHEET_NAME})을 찾을 수 없습니다. 확인해주세요.`
+    // Type guard for error
+    if (error instanceof Error) {
+      if (error.message === 'Google API credentials configuration is missing.' || error.message === 'Invalid Google API credentials format.') {
+          errorMessage = '서버 설정 오류: Google API 인증 정보가 잘못되었습니다.';
+      } else if ('code' in error && (error as { code?: string }).code === 'ENOENT') { 
+        errorMessage = 'Google API 인증 파일(credentials.json)을 찾을 수 없습니다. 경로를 확인해주세요.';
+      } else if (error.message && error.message.includes('PERMISSION_DENIED')) {
+        errorMessage = 'Google Sheet에 접근 권한이 없습니다. 서비스 계정에 편집자 권한을 부여했는지 확인해주세요.';
+      } else if (error.message && error.message.includes('Requested entity was not found')){
+        errorMessage = `Google Sheet ID (${spreadsheetId}) 또는 시트 이름 (${SHEET_NAME})을 찾을 수 없습니다. 확인해주세요.`
+      }
+      return NextResponse.json({ message: errorMessage, error: error.message || 'Unknown error' }, { status: 500 });
+    } else {
+      // Handle cases where error is not an Error instance
+      return NextResponse.json({ message: errorMessage, error: 'An unknown error occurred' }, { status: 500 });
     }
-    return NextResponse.json({ message: errorMessage, error: error.message || 'Unknown error' }, { status: 500 });
   }
 }

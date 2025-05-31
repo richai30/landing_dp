@@ -70,7 +70,7 @@ export default function Home() {
               <div className="space-y-10">
                 <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#2C3E50] leading-relaxed">
                   초보 셀러도 바로 써먹는<br/>
-                  상세페이지 <span className="text-[#4A90E2]">'매출 공식'</span>
+                  상세페이지 <span className="text-[#4A90E2]">&apos;매출 공식&apos;</span>
                 </h1>
                 <p className="text-lg md:text-xl text-[#495057] leading-relaxed max-w-3xl mx-auto tracking-wide">
                   전환율 상승 전문가의 날카로운 진단으로 매출 상승의 기회를 발견하세요
@@ -102,24 +102,24 @@ export default function Home() {
                 <div className="w-12 h-12 bg-[#E3F2FD] rounded-full flex items-center justify-center flex-shrink-0">
                   <span className="text-[#4A90E2] text-xl">1</span>
                 </div>
-                <p className="text-lg md:text-xl text-[#495057]">"광고는 해야 할 것 같은데, 상세페이지가 자신이 없어서 망설여지나요?"</p>
+                <p className="text-lg md:text-xl text-[#495057]">&quot;광고는 해야 할 것 같은데, 상세페이지가 자신이 없어서 망설여지나요?&quot;</p>
               </div>
               <div className="flex items-center gap-6 p-6 rounded-xl bg-[#F8F9FA] transform hover:scale-[1.02] transition-transform duration-200">
                 <div className="w-12 h-12 bg-[#E3F2FD] rounded-full flex items-center justify-center flex-shrink-0">
                   <span className="text-[#4A90E2] text-xl">2</span>
                 </div>
-                <p className="text-lg md:text-xl text-[#495057]">"큰맘 먹고 상품을 올렸는데, 왜 아무도 안 살까요?"</p>
+                <p className="text-lg md:text-xl text-[#495057]">&quot;큰맘 먹고 상품을 올렸는데, 왜 아무도 안 살까요?&quot;</p>
               </div>
               <div className="flex items-center gap-6 p-6 rounded-xl bg-[#F8F9FA] transform hover:scale-[1.02] transition-transform duration-200">
                 <div className="w-12 h-12 bg-[#E3F2FD] rounded-full flex items-center justify-center flex-shrink-0">
                   <span className="text-[#4A90E2] text-xl">3</span>
                 </div>
-                <p className="text-lg md:text-xl text-[#495057]">"열심히 만들었는데... 어디가 문제인지, 뭘 바꿔야 매출이 오를지 막막합니다."</p>
+                <p className="text-lg md:text-xl text-[#495057]">&quot;열심히 만들었는데... 어디가 문제인지, 뭘 바꿔야 매출이 오를지 막막합니다.&quot;</p>
               </div>
             </div>
             <div className="max-w-3xl mx-auto mt-16 p-8 bg-[#E3F2FD] rounded-xl">
               <p className="text-lg text-[#2C3E50] leading-relaxed text-center">
-                대표님의 잘못이 아닙니다. 초보 셀러일수록 상세페이지의 <span className="font-bold text-[#4A90E2]">'진짜 문제'</span>를 찾기 어렵습니다.
+                대표님의 잘못이 아닙니다. 초보 셀러일수록 상세페이지의 <span className="font-bold text-[#4A90E2]">&apos;진짜 문제&apos;</span>를 찾기 어렵습니다.
               </p>
             </div>
           </div>
@@ -195,7 +195,7 @@ export default function Home() {
             <div className="max-w-4xl mx-auto mt-16 p-8 bg-[#E3F2FD] rounded-xl text-center">
               <p className="text-lg text-[#2C3E50] leading-relaxed">
                 <span className="font-bold">일반적인 분석과는 다릅니다.</span><br/>
-                대표님의 실제 '첫 매출 발생'과 '지속적인 수익 증대'에 초점을 맞춘 실전적인 솔루션을 제공합니다.
+                대표님의 실제 &apos;첫 매출 발생&apos;과 &apos;지속적인 수익 증대&apos;에 초점을 맞춘 실전적인 솔루션을 제공합니다.
               </p>
             </div>
           </div>

@@ -56,3 +56,9 @@ next-env.d.ts
 # User-uploaded files / Sensitive configuration
 /public/uploads/
 credentials.json # Ignore Google API credentials
+
+# BFG Repo-Cleaner Jar file
+bfg*.jar
+
+# Mirrored git repository for BFG
+landing_dp.git/
